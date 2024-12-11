@@ -2,3 +2,5 @@ services:
   notificaciones:
     build: .
     container_name: node_notify
+    ports:
+      -"8888:8888"
