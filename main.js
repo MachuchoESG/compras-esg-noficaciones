@@ -3,11 +3,6 @@ const http = require("http");
 const socketIo = require("socket.io");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
-const { emit } = require("process");
-const { url } = require("inspector");
-
-// machucho $2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi
-//sm $2y$12$ms5grFr/GTDm8ZiB/R2i3eDOL5wrWGJt0BaBHG18WVZshKghySh7i
 const HOST = "0.0.0.0";
 
 const app = express();
