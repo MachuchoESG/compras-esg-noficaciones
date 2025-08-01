@@ -98,6 +98,13 @@ app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
+    if (!email || !password) {
+      return res.status(401).json({
+        success: false,
+        data: { message: 'Contraseña o Email incorrectos' }
+      });
+    }
+
     const response = await axios.post('https://comprasesg.com.mx/login', {
       email,
       password
