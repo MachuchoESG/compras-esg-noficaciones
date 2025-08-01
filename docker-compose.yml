@@ -1,9 +1,9 @@
 services: 
   notificaciones:
     build: .
-    container_name: node_notify
+    container_name: node-notify
     ports:
-      -"8888"
+      - "8888"
     networks:
       - proxy
       - internal
