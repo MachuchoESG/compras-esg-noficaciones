@@ -12,7 +12,6 @@ const accountSid = process.env.ACCOUNTSID;
 const authToken = process.env.AUTHTOKEN;
 
 
-
 const app = express();
 app.use(cors("*"));
 app.use(express.json());
@@ -26,7 +25,7 @@ const io = socketIo(server, {
   },
 });
 
-const JWT_SECRET = "ESG";
+const JWT_SECRET = process.env.SECRET;
 
 // Middleware para autenticar el token JWT en Socket.IO
 io.use((socket, next) => {
