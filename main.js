@@ -3,7 +3,15 @@ const http = require("http");
 const socketIo = require("socket.io");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
+require("dotenv").config();
+const { json } = require("stream/consumers");
+const { default: axios } = require("axios");
 const HOST = "0.0.0.0";
+
+const accountSid = process.env.ACCOUNTSID;
+const authToken = process.env.AUTHTOKEN;
+
+
 
 const app = express();
 app.use(cors("*"));
@@ -87,6 +95,30 @@ app.get("/", (req, res) => {
   );
 });
 
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const response = await axios.post('https://comprasesg.com.mx/login', {
+      email,
+      password
+    });
+
+    // Suponiendo que la API Laravel responde con un JSON
+    return res.json({
+      success: true,
+      data: response.data
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Error al hacer login",
+      error: error.response?.data || error.message
+    });
+  }
+});
+
 app.post("/send/requisicion-actualizada", authenticateJWT, (req, res) => {
   console.log(req.body);
   var userId = req.body.id_usuario_alertar;
@@ -150,6 +182,30 @@ app.post("/send/requisicion/departamento", authenticateJWT, (req, res) => {
     res.status(404).send("El usuario no está conectado");
   }
 });
+
+app.get('/send/requisicion/whatsapp', authenticateJWT, async (req, res) => {
+  const client = require('twilio')(accountSid, authToken);
+
+  try {
+    var resTwilio = await client.messages
+    .create({
+        from: 'whatsapp:+14155238886',
+        /* contentSid: 'HXb5b62575e6e4ff6129ad7c8efe1f983e',
+        contentVariables: '{"1":"12/1","2":"3pm"}', */
+        body: 'ESTE ES UN MENSAJE DE PRUEBA',
+        to: 'whatsapp:+5218113953999'
+    })
+    /* .then(message => console.log(message.sid))
+    .done(); */
+    console.log(resTwilio);
+    
+    
+  } catch (error) {
+    return res.json({ error: error});
+  }
+  
+  return res.json({ hola: 'hola' });
+})
 
 // Iniciar el servidor
 server.listen(8888, HOST, () => {
